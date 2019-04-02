@@ -87,9 +87,79 @@ init是使用Git的第一个命令。
 （3）git diff
     执行git diff来查看执行git status的结果的详细信息。git diff命令显示已写入缓存与已修改但尚未
 写入缓存的改动的区别。有以下几个应用，第三条为重点：
+    ·尚未缓存的改动：git diff
+    ·查看已缓存的改动：git diff --cached
+    ·查看已缓存与未缓存的所有改动：git diff HEAD
+    ·显示摘要而非整个diff：git diff --stat
+    例如：
+        $ git diff git.txt
+（4）git commit
+    执行git commit将缓存区内容添加到仓库中。
+    第一步：配置邮箱地址
+        $ git config --global user.name 'runoob'
+        $ git config --global user.email test@runoob.com
+    第二步：写入缓存
+        $ git add git.txt
+    第三步：提交到仓库
+        $ git commit -m "第一次版本提交"         //-m选项可以在命令中提交注释//
+    可以通过-a选项直接从工作区提交到仓库，跳过提交缓存的步骤
+        $ git commit -am "第二次版本提交"
+（5）git reset HEAD
+    取消已缓存的内容。执行git reset HEA以取消之前git add添加，但不希望包含在下一次提交快照的
+缓存。
+    例如：
+        $ git reset HEAD git.txt
+（6）git rm
+    如果只是简单地从工作目录中手工删除文件，运行git status时就会有Changes not staged for 
+commit的提示。要从Git中移除某个文件，就必须要从已跟踪文件清单中移除，然后提交。可以用以下命令
+完成子项工作。注意，这是从工作区中删除。
+        $ git rm <file>
+    如果删除之前修改过并已经存档放到暂存区域，就必须使用强制删除选项-f
+        $ git rm -f <file>
+    如果把文件从暂存区域移除，但仍然希望保留在当前工作目录中，换句话说，仅是从跟踪清单中删除，
+使用--cached选项即可。
+        $ git rm --cached <file>
+    可以递归删除，即如果后面跟的是一个目录作为参数，则会递归删除整个目录中的所有子目录和文件。
+    进入某个目录中，可以删除该目录下所有文件和子目录：
+        $ git rm -r *
+（7）git mv
+    git mv命令用于移动或重命名一个文件、目录、软连接。下面对一个文件进行重命名：
+        $ git mv README README.md
+----------------------------------------------------------------------------------------------
+
+六、Git分支管理
+1.创建分支、合并分支
+    使用分支意味着你可以从开发主线上分离出来，然后在不影响主线的同时继续工作。
+    创建分支命令：
+        $ git branch <branchname>
+    切换分支命令：
+        $ git checkout <branchname>
+    当你切换分支的时候，Git会用该分支的最后提交的快照替换你的工作目录的内容，所以多个分支不需
+要多个目录。
+    合并分支命令：
+        $ git merge
+    你可以多次合并到同一分支，也可以选择在合并之后删除被并入的分支。
+（1）git branch
+    没有参数是，会列出本地所有分支
+        $ git branch
+    如果加上名字，就会手动创建分支
+        $ git branch testing
+    如果上次提交后，又以此方式创建分支，然后再提交，然后切换到这个新建的分支，那么Git将还原你
+的工作目录到刚创建分支时的样子。
+（2）git checkout
+    使用git checkout切换到我们想要修改的分支。
+        $ git checkout testing
+    使用git checkout -b testing来创建新的分支并切换到该分支下，从而在该分支中操作。在哪个分支
+下创建，这个新的分支就包含哪个的工作目录。
+（3）git branch -d branchname
+    删除分支
+        $ git branch -d test2
+（3）git merge
+    合并分支。将任何分支合并到当前分支中去
+        $ git merge
+    例如，master分支有1.txt和2.txt，test分支有1.txt，如果在master分支中：
+        $ git merge test
     
-
-
 
 
 
