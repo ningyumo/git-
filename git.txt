@@ -8,8 +8,8 @@ global选项重新配置就可以，新的设定保存在当前项目的.git/con
     3.查看配置信息
         $ git config --list
 ----------------------------------------------------------------------------------------------
-
 二、Git工作流程
+
 一般工作流程：
     （1）克隆Git资源作为工作目录
     （2）在克隆资源上添加或修改文件
@@ -17,8 +17,8 @@ global选项重新配置就可以，新的设定保存在当前项目的.git/con
     （4）在提交前查看修改
     （5）在修改完成后，如果发现错误，可以撤回提交再次修改并提交
 ----------------------------------------------------------------------------------------------
-
 三、Git工作区、缓存区、版本库
+
 （1）工作区
     就是在电脑里能看到的目录
 （2）暂存区
@@ -32,13 +32,14 @@ global选项重新配置就可以，新的设定保存在当前项目的.git/con
 commit就是往master分支上提交更改。
     你可以理解为需要提交的文件修改通通放到暂存区，然后一次性提交暂存区的所有修改。
 ----------------------------------------------------------------------------------------------
-
 四、Git创建仓库
+
 1.git init
     Git使用git init命令来初始化一个git仓库，Git的很多命令都需要在Git的仓库中运行，所以git 
 init是使用Git的第一个命令。
     在执行完git init命令后，Git仓库会生成一个.git目录，该目录包含了资源的所有元数据，其他的项目
 目录保持不变。
+--------------------------------------------------
 2.使用方法
 （1）使用当前目录作为Git仓库，我们只需要使它初始化：
     $ git init
@@ -47,26 +48,29 @@ init是使用Git的第一个命令。
 （2）使用指定目录作为Git仓库：
     $ git init newpro
     初始化后会在newpro目录下出现一个.git目录。所有Git需要的数据和资源都存放在这个目录中。
+--------------------------------------------------
 3.git clone
     使用git clone从现有Git仓库中拷贝项目，命令格式如下：
         $ git clone <repo>
     如果我们需要克隆到指定的目录，可以使用一下命令格式：
         $ git clone <repo> <directory>              //repo：Git仓库    directory：本地目录 //
 ----------------------------------------------------------------------------------------------
-
 五、Git基本操作
+
 1.git init
     用git init在目录中创建新的Git仓库，你可以在任何时候、任何目录中这么做，完全是本地化的。
         $ git init                      //用ls查看当前目录下所有文件//
+--------------------------------------------------
 2.git clone
     使用git clone拷贝一个Git仓库到本地，让自己能够查看该项目或者进行修改
         $ git clone [url]               //[url]为你想要复制的项目//
     例如：
-        $ git clone git@github.com:schacon/simplegit.git   
+        $ git clone git@github.com:ningyumo/simplegit.git   
     默认情况下Git会按照你提供的URL所指示的项目的名称创建你的本地项目目录，通常就是该URL最后一
 个/之后的项目名称，可以在该命令之后加上你想要的名字。
     例如：
-        $ git clone git@github.com:schacon/simplegit.git mulu2
+        $ git clone git@github.com:ningyumo/simplegit.git mulu2
+--------------------------------------------------
 3.基本快照
     Git的工作就是创建和保存你的项目的快照及之后的快照进行对比。本节将对有创建和提交你的项目的
 快照的命令做介绍。
@@ -126,8 +130,8 @@ commit的提示。要从Git中移除某个文件，就必须要从已跟踪文�
     git mv命令用于移动或重命名一个文件、目录、软连接。下面对一个文件进行重命名：
         $ git mv README README.md
 ----------------------------------------------------------------------------------------------
-
 六、Git分支管理
+
 1.创建分支、合并分支
     使用分支意味着你可以从开发主线上分离出来，然后在不影响主线的同时继续工作。
     创建分支命令：
@@ -146,6 +150,11 @@ commit的提示。要从Git中移除某个文件，就必须要从已跟踪文�
         $ git branch testing
     如果上次提交后，又以此方式创建分支，然后再提交，然后切换到这个新建的分支，那么Git将还原你
 的工作目录到刚创建分支时的样子。
+    git branch命令的-r选项，可以用来查看远程分支，-a查看所有分支（包括远程和本地），什么
+都不加查看本地分支。
+        $ git branch
+        $ git branch -r
+        $ git branch -a
 （2）git checkout
     使用git checkout切换到我们想要修改的分支。
         $ git checkout testing
@@ -154,48 +163,243 @@ commit的提示。要从Git中移除某个文件，就必须要从已跟踪文�
 （3）git branch -d branchname
     删除分支
         $ git branch -d test2
-（3）git merge
+（4）git merge
     合并分支。将任何分支合并到当前分支中去
         $ git merge
     例如，master分支有1.txt和2.txt，test分支有1.txt，如果在master分支中：
         $ git merge test
-    
+    那么，master就会删除2.txt
+    合并分支不仅仅是简单的文件添加、移除操作，Git也会合并修改，如果两个分支有冲突可以通过
+cat<file>来查看冲突
+（5）git merge --no-ff
+    通常合并分支时，如果可能，Git会用FastForward模式，但这种模式下，删除分支之后，会丢掉分支信
+息。如果要强制禁用FastForward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
+    例如：
+        $ git merge --no-ff -m "merge with no-ff" dev
+    因为本次合并要创建一个新的commit，所以加上-m参数把commit描述写进去。
+    合并分支时，加上--no-ff参数就可以使用普通模式合并，合并后的历史有分支，能看出来曾经做过合
+并，而FastForward合并就看不出来曾经做过合并。
+--------------------------------------------------
+2.分支策略
+    在实际开发中，我们应该按照几个基本原则进行分支管理：首先，master分支应该是非常稳定的，也就
+是仅用来发布新版本，平时不能在上面干活；那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+（1）Bug分支
+    Git提供了一个stash功能，可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作。
+    例如，在dev分支：
+        $ git stash
+    然后再master分支创建一个bug分支，在bug分支修改bug并提交，然后切换到master后merge合并，再切
+换到dev分支。
+    在dev分支上使用git stash list查看有哪些储藏，有两种方式恢复储藏：
+    第一种：
+        $ git stash apply stash@{0}
+    这种方式恢复后stash内容并不删除，需要用git stash drop来删除。
+    第二种：
+        $ git stash pop stash@{0}
+    这种方式恢复的同时把stash内容也删除了。
+（2）feature分支
+    添加一个新功能时，你肯定不希望因为一些实验性质的代码，把主分支搞乱了，所以，每添加一个新功
+能，最好新建一个feature分支，在上面开发，完成后，合并，最后，删除该feature分支。如果要丢弃一个没被合并过的分支，要通过git branch -D <name>强行删除。
+（3）多人协作
+    当你从远程仓库克隆时，实际上Git自动把本地的master分支和远程的master分支对应起来了，并且，
+远程仓库的默认名称是origin。
+    要查看远程库的信息，用git remote：
+        $ git remote
+    或者，用git remote -v显示更详细的信息：
+        $ git remote -v
+    （Ⅰ）推送分支
+    推送分支，就是把该分支上的所有本地提交推送到远程库。推送时，要指定本地分支，这样，Git就会
+把该分支推送到远程库对应的分支上：
+    例如：
+        $ git push origin master
+    如果要推送其他分支，比如dev：
+        $ git push origin dev
+    但是，并不是一定要把本地分支往远程推送，那么，哪些分支需要推送，哪些不需要呢？
+        ·master分支是主分支，因此要时刻与远程同步
+        ·dev分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步
+        ·bug分支只用于在本地修复bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个bug
+        ·feature分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+    （Ⅱ）抓取分支
+    模拟另外一台电脑或者同一台电脑的另一个目录下克隆：
+        $ git clone gitgit@github.com:ningyumo/learngit.git
+    默认情况下，另一台电脑只能看到本地的master分支，如果要在dev分支上开发，就必须创建远程
+origin的dev分支到本地：
+        $ git checkout -b dev origin/dev
+    在dev分支上修改，然后push到远程：
+        $ git add .
+        $ git commit -m "add env"
+        $ git push origin dev
+    假设原来的电脑对同样的文件做了修改，并是试图推送，会推送失败，因为另一台电脑的最新提交和
+原来电脑视图推送的提交有冲突。这时，需要用git pull把最新的提交从origin/dev抓下来，然后在本地
+合并，解决冲突再推送：
+        $ git pull
+    如果git pull失败，原因是因为没有指定本地dev分支与远程origin/dev分支的链接，设置dev和
+origin/dev的链接，然后再pull：
+        $ git branch --set-upstream-to=origin/dev dev
+        $ git pull
+    git pull成功后，手动合并冲突，解决后，在提交，再push：
+        $ git commit -m "fix env conflick"
+        $ git push origin dev
+    将某个远程主机的更新，全部取回本地可以用git fetch：
+        $ git fetch <远程主机名>
+    可以简写：
+        $ git fetch
+    默认情况下，git fetch取回所有分支的更新。如果只想取回特定分支的更新，可以指定分支名：
+        $ git fetch <远程主机名> <分支名>
+    比如，取回origin主机的master分支：
+        $ git fetch origin master
+    所取回的更新，在本地主机上用“远程主机名/分支名”的形式读取。比如origin/master。
+注意：
+    git fetch、git pull、git clone区别
+（1）简单理解
+    git clone是本地没有仓库时，将远程仓库整个下载过来。
+    git pull是本地有仓库时，将远程仓库的更新下载过来，并与本地代码merge合并。
+    git fetch是本地有仓库时，将远程仓库的更新下载过来。
+（2）详细理解
+    从字面意思也可以理解，都是往下拉代码，git clone是克隆，git pull 是拉。
+    但是，也有区别：
+    从远程服务器克隆一个一模一样的版本库到本地,复制的是整个版本库，叫做clone.
+（clone是将一个库复制到你的本地，是一个本地从无到有的过程）
+    从远程服务器获取到一个branch分支的更新到本地，并更新本地库，叫做pull.
+（pull是指同步一个在你本地有版本的库内容更新的部分到你的本地库）
+    git pull相当于是从远程获取最新版本并merge（合并）到本地。git pull = git fetch + git 
+merge，git fetch更安全一些。
+    git clone是远程操作的第一步，通常是从远程主机克隆一个版本库：
+        $ git clone <repo>
+    该命令会在本地主机生成一个目录，与远程主机的版本库同名，如果要是制定不同的目录名，可以将目
+录名作为git clone 命令的第二个参数。
+        $ git clone <repo> <directory> 
+    git clone支持多种协议，除了http（s),还有ssh,git,本地协议。
+    git pull 作用是，取回远程主机某个分支的更新，再与本地的指定分支合并。
+        $ git pull #远程主机(origin)# #远程分分支(next)#：#本地分之(master)#
+    例如：
+        $ git pull origin dev : dev
+    如果远程分支是与当前分支合并，则冒号后面的部分可以省略。
+        $ git pull #远程主机(origin)# #远程分支(next)#
+        $ git pull origin dev
+    上面相当于
+        $ git fetch origin
+        $ git merge origin/next 
+    在某些场合，git会自动在本地和远程分支之间，建立一种追踪关系。比如，在git clone 的时候，
+所有本地分支默认与远程主机的同名分支，建立追踪关系，也就是，本地的master分支自动“追踪”origin/master分支。git 可以手动建立追踪：
+        $ git branch --set-upstream-to=origin/dev dev   --->指定dev分支追踪到origin/dev。
+    如果当前分支只有一个追踪分支，连远程主机名都可以省略，表示当前分之自动与唯一一个追踪分之进
+行合并。
+        $ git pull
+----------------------------------------------------------------------------------------------
+七、Git查看提交历史
 
+    使用git log查看提交历史
+        $ git log
+    使用--oneline选项来查看历史记录的简洁版本
+        $ git log --oneline
+    还可以使用git log --pretty=oneline来查看
+        $ git log --pretty=oneline
+    使用--graph选项查看历史中什么时候出现了分支、合并
+        $ git log --oneline --graph
+    使用--reverse来逆向显示所有日志
+        $ git log --reverse --oneline
+    如果想查找指定用户的提交日志，可以使用--author
+        $ git log --author=Linus --oneline -5
+    如果要指定日期，可以执行几个选项--since、--before、--until、--after
+        $ git log --oneline --before={3.weeks.ago} --after={2010-04-18} --no-merges
+        $ git log --graph --pretty=oneline --abbrev-commit
+----------------------------------------------------------------------------------------------
+八、Git标签
 
+    如果你达到一个重要的阶段，并希望永远记住这个特别提交的快照，你可以使用git tag给它打上标签
+        $ git tag -a v1.0
+    如果忘了给某个提交打标签，又将它发布了，可以给它追加标签。
+    例如，假设我们发布了提交85fc7e7(上面实例最后一行)，但是那时候忘了给它打标签。 我们现在也可以：
+        $ git tag -a v0.9 85fc7e7
+    查看所有标签：
+        $ git tag
+    可以用git show <tagname>查看标签信息：
+        $ git show v0.9
+    如果标签打错了也可以删除：
+        $ git tag -d v0.1
+    因为创建的标签都只存储在本地，不会自动推送到远程。所以，打错的标签可以在本地安全删除。
+    如果要推送某个标签到远程，使用：
+        $ git push origin -tags
+    如果标签已推送到远程，要删除远程标签：
+        $ git tag -d v0.9    //先删除本地
+        $ git push origin :refs/tags/v0.9      //删除远程
+----------------------------------------------------------------------------------------------
+九、Git 版本回退
 
+    首先Git需要知道当前版本是哪个版本，在Git中。用HEAD表示当前版本，上一个版本就是HEAD^，上上
+一个版本就是HEAD^^，上100个版本写成HEAD~100。然后使用git reset --hard来回退版本。
+    例如：
+    一共提交了三个版本，HEAD所在的版本是当前版本，即append GPL
+        $ git log --oneline
+        c352087 (HEAD -> master) append GPL
+        d595035 add distributed
+        b0dce54 wrote a readme file
+    执行下面的代码
+        $ git reset --hard HEAD^
+    则回退到了add distributed版本，同时append GPL版本被删除了
+        $ git log --oneline
+        d595035 (HEAD -> master) add distributed
+        b0dce54 wrote a readme file
+    再执行下面的代码，则又回到了append GPL版本。
+        $ git reset --hard c352087
+        HEAD is now at 83b0afe append GPL
+    Git提供了一个命令git reflog来记录你的每一次命令：
+        $ git reflog
+----------------------------------------------------------------------------------------------
+十、撤销修改
 
+    git checkout --file可以丢弃工作区的修改
+        $ git checkout --readme.txt  
+    上面的意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+        ·readme.txt自修改后还没有被放到暂存区，现在撤销修改就回到和版本库一模一样的状态；
+        ·readme.txt已经添加到缓存区后，又做了修改，现在，撤销修改就回到添加到暂存区后的状态。
+    总之就是回到最近一次git commit或git add时的状态。
+    注意：这是撤销对readme.txt所有修改，包括删除了reame.txt
+----------------------------------------------------------------------------------------------
+十一、在Github上添加远程库
 
+第一步：
+    创建SSH Key。在用户主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和
+id_rsa.pub这两个文件，如果已经有了，可直接跳到下一步。如果没有，打开Shell（Windows下打开Git Bash），创建SSH Key：
+    $ ssh-keygen -t rsa -C "youremail@example.com"
+    然后一路回车，使用默认值即可。如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有
+id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
+第二步：
+    登陆GitHub，打开“Account settings”，“SSH Keys”页面：
+    然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容。
+（1）推送到远程库
+    首先在Github上创建库，然后再本地输入：
+        $ git remote add origin https://github.com/ningyumo/learngit.git
+    这个命令把本地库和Github远程库关联起来，添加后远程库的名字就是origin，下一步就可以把本地库
+的所有内容推送到远程库上：
+        $ git push -u origin master
+    把本地库的内容推送到远程，用git push命令，实际上是把当前分支master推送到远程。由于远程库是
+空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+    以后只要本地做了提交，就可以通过git push origin master命令把本地master分支的最新修改推送到
+Gtihub。
+        $ git push origin master
+（2）从远程库中下载
+    使用git clone命令：
+        $ git clone https://github.com/ningyumo/learngit.git
+    我们可以删除已有的GitHub远程库：
+        $ git remote rm origin
+----------------------------------------------------------------------------------------------
+十二、自定义Git
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    在Git工作区的根目录下创建一个特殊的.gitignore文件，然后把要忽略的文件名填进去，Git就会自动
+忽略这些文件。
+    不需要从头写.gitignore文件，GitHub已经为我们准备了各种配置文件，只需要组合一下就可以使用了
+。所有配置文件可以直接在线浏览：https://github.com/github/gitignore
+    有些时候，你想添加一个文件到Git，但发现添加不了，原因是这个文件被.gitignore忽略了：
+        $ git add App.class
+        The following paths are ignored by one of your .gitignore files:
+        App.class
+        Use -f if you really want to add them.
+    如果你确实想添加该文件，可以用-f强制添加到Git：
+        $ git add -f App.class
+    或者你发现，可能是.gitignore写得有问题，需要找出来到底哪个规则写错了，可以用
+git check-ignore命令检查：
+        $ git check-ignore -v App.class
+        .gitignore:3:*.class    App.class
+    Git会告诉我们，.gitignore的第3行规则忽略了该文件，于是我们就可以知道应该修订哪个规则。
+----------------------------------------------------------------------------------------------
